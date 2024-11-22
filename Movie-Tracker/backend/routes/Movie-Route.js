@@ -2,16 +2,16 @@ const express = require('express');
 const router = express.Router();
 const movieController = require('../controllers/Movie-Controller.js');
 
-// Add a new movie
+// ADD A NEW MOVIE
 router.post('/add', movieController.createMovie);
 
-// Retrieve all movies
+// GET ALL MOVIES
 router.get('/all', movieController.getMovies);
 
-// Update movie by ID
+// UPDATE A MOVIE BY ID
 router.put('/update/:id', movieController.updateMovie);
 
-// Delete movie by ID
+// DELETE A MOVIE BY ID
 router.delete('/delete/:id', movieController.deleteMovie);
 
 module.exports = router;
