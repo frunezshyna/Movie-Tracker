@@ -1,10 +1,9 @@
 const movieModel = require('../models/Movie-Model.js');
 
-// Add a new movie
+// ADD A NEW MOVIE
 const createMovie = (req, res) => {
     const { title, director, year, genre, movie_duration, release_date } = req.body;
 
-    // Validate all required fields
     if (!title || !director || !year || !genre || !movie_duration || !release_date) {
         return res.status(400).json({ error: 'All fields are required' });
     }
@@ -13,7 +12,10 @@ const createMovie = (req, res) => {
     movieModel.createMovie(movieData, (err, result) => {
         if (err) {
             console.error('Error inserting movie:', err);
-            return res.status(500).json({ error: 'Failed to add movie', details: err }); // Ensure we send proper error details
+            return res.status(500).json({ 
+                error: 'Failed to add movie', 
+                details: err 
+            });
         }
         res.status(201).json({
             id: result.insertId,
@@ -27,26 +29,27 @@ const createMovie = (req, res) => {
     });
 };
 
-// Get all movies
+// GET ALL MOVIES
 const getMovies = (req, res) => {
     movieModel.getMovies((err, results) => {
         if (err) {
             console.error('Error fetching movies:', err);
-            return res.status(500).json({ error: 'Failed to retrieve movies', details: err }); // Send error details
+            return res.status(500).json({ 
+                error: 'Failed to retrieve movies', 
+                details: err 
+            });
         }
         res.status(200).json(results);
     });
 };
 
-// Update movie by ID
+// UPDATE A MOVIE BY ID
 const updateMovie = (req, res) => {
-    const { id } = req.params;  // Get movie ID from the URL
+    const { id } = req.params;
     const { title, director, year, genre, movie_duration, release_date } = req.body;
 
-    // Log the incoming request to check if all fields are present
     console.log("Incoming data for update:", req.body);
 
-    // Validate that all fields are present and not null
     if (!title || !director || !year || !genre || !movie_duration || !release_date) {
         return res.status(400).json({ error: 'All fields are required' });
     }
@@ -56,11 +59,16 @@ const updateMovie = (req, res) => {
     movieModel.updateMovie(id, updatedData, (err, result) => {
         if (err) {
             console.error('Error updating movie:', err);
-            return res.status(500).json({ error: 'Failed to update movie', details: err });
+            return res.status(500).json({ 
+                error: 'Failed to update movie', 
+                details: err 
+            });
         }
 
         if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'Movie not found' });
+            return res.status(404).json({ 
+                error: 'Movie not found' 
+            });
         }
 
         res.status(200).json({
@@ -70,18 +78,22 @@ const updateMovie = (req, res) => {
     });
 };
 
-
-// Delete movie by ID
+// DELETE A MOVIE BY ID
 const deleteMovie = (req, res) => {
     const { id } = req.params;
 
     movieModel.deleteMovie(id, (err, result) => {
         if (err) {
             console.error('Error deleting movie:', err);
-            return res.status(500).json({ error: 'Failed to delete movie', details: err }); // Send error details
+            return res.status(500).json({ 
+                error: 'Failed to delete movie', 
+                details: err 
+            });
         }
         if (result.affectedRows === 0) {
-            return res.status(404).json({ error: 'Movie not found' });
+            return res.status(404).json({ 
+                error: 'Movie not found' 
+            });
         }
         res.status(200).json({ message: 'Movie deleted successfully' });
     });
