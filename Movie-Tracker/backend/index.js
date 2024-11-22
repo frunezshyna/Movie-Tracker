@@ -1,16 +1,24 @@
+// BASH
+// npm init -y
+// npm i express dotenv
+
+//To Start
+// node index.js
+
+// Server Setup
 const express = require('express');
 const dotenv = require('dotenv');
 const movieRoutes = require('./routes/Movie-Route.js');
 
-dotenv.config();  // Load environment variables
+dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware to parse JSON requests
+// Middlewares
 app.use(express.json());
 
-// Use movie routes
+// Use Movie Routes
 app.use('/movies', movieRoutes);
 
 // Basic route to check if the server is working
