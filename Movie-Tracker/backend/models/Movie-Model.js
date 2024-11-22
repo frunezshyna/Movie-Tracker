@@ -10,7 +10,7 @@ const db = mysql.createConnection({
     database: process.env.DB_NAME
 });
 
-// Connect to the database
+// Connect to Database
 db.connect((err) => {
     if (err) {
         console.error('Error connecting to database:', err);
@@ -19,9 +19,8 @@ db.connect((err) => {
     console.log('Connected to MySQL database');
 });
 
-// CRUD operations
-
-// Add a new movie
+// CRUD OPERATIONS
+// ADD A NEW MOVIE
 const createMovie = (movieData, callback) => {
     const query = 'INSERT INTO movies (title, director, year, genre, movie_duration, release_date) VALUES (?, ?, ?, ?, ?, ?)';
     db.query(query, 
@@ -36,13 +35,13 @@ const createMovie = (movieData, callback) => {
         callback);
 };
 
-// Retrieve all movies
+// GET ALL MOVIES
 const getMovies = (callback) => {
     const query = 'SELECT * FROM movies';
     db.query(query, callback);
 };
 
-// Update movie details by ID
+// UPDATE A MOVIE BY ID
 const updateMovie = (id, movieData, callback) => {
     const query = `
         UPDATE movies
@@ -55,7 +54,7 @@ const updateMovie = (id, movieData, callback) => {
             movieData.director,
             movieData.year,
             movieData.genre,
-            movieData.movie_duration, // Ensure movie_duration is passed correctly
+            movieData.movie_duration,
             movieData.release_date,
             id
         ], 
@@ -63,7 +62,7 @@ const updateMovie = (id, movieData, callback) => {
     );
 };
 
-// Delete a movie by ID
+// DELETE A MOVIE BY ID
 const deleteMovie = (id, callback) => {
     const query = 'DELETE FROM movies WHERE id = ?';
     db.query(query, [id], callback);
