@@ -1,21 +1,31 @@
-// backend/controllers/movieController.js
 const Movie = require("../model/Movie-Models.js");
 
-// Create Movie
+// Add a New Movie
 module.exports.addMovie = async (req, res) => {
     try {
-        const { title, director, year, genre, movie_duration, release_date } = req.body;
-        const newMovie = { title, director, year, genre, movie_duration, release_date };
+        const { title, director, year, genre, movie_duration, release_date, user_rating, review, watch_status } = req.body;
+        // Checking for Duplicates
+        const existingMovie = await Movie.getMovieByTitleAndDirector(title, director);
+
+        if (existingMovie) {
+            return res.status(400).json({
+                code: "DUPLICATE-MOVIE",
+                message: "Looks like we already have this movie in the system with the same title and director!"
+            });
+        }
+
+        const newMovie = { title, director, year, genre, movie_duration, release_date, user_rating, review, watch_status };
         const result = await Movie.createMovie(newMovie);
+
         res.status(201).json({
             code: "MOVIE-ADDED",
-            message: "Movie has been successfully added.",
+            message: "Done! The movie is all set in our collection.",
             result: result
         });
     } catch (error) {
         res.status(500).json({
             code: "SERVER-ERROR",
-            message: "There was an error adding the movie.",
+            message: "Oops! Something went wrong while adding the movie.",
             error: error.message
         });
     }
@@ -25,34 +35,41 @@ module.exports.addMovie = async (req, res) => {
 module.exports.getAllMovies = async (req, res) => {
     try {
         const movies = await Movie.getAllMovies();
+
+        if (movies.length === 0) {
+            return res.status(200).json({
+                code: "NO-MOVIES",
+                message: "Looks like we’re missing movies. Add some and check back soon!"
+            });
+        }
         res.status(200).json({
             code: "ALL-MOVIES-RESULT",
-            message: "List of all movies",
+            message: "Here’s the full list of movies.",
             result: movies
         });
     } catch (error) {
         res.status(500).json({
             code: "SERVER-ERROR",
-            message: "There was an error fetching movies.",
+            message: "Oops! Something went wrong while fetching the movies.",
             error: error.message
         });
     }
 };
 
-// Get Movie by ID
+// Get a Movie by ID
 module.exports.getMovieById = async (req, res) => {
     try {
         const movie = await Movie.getMovieById(req.params.id);
         if (movie) {
             res.status(200).json({
                 code: "MOVIE-FOUND",
-                message: "Movie found.",
+                message: "Here’s the movie you were looking for!",
                 result: movie
             });
         } else {
             res.status(404).json({
                 code: "MOVIE-NOT-FOUND",
-                message: "Movie not found."
+                message: "Oops, no movie found with that ID."
             });
         }
     } catch (error) {
@@ -64,7 +81,7 @@ module.exports.getMovieById = async (req, res) => {
     }
 };
 
-// Update Movie
+// Update a Movie by ID
 module.exports.updateMovie = async (req, res) => {
     try {
         const updatedMovie = req.body;
@@ -72,42 +89,42 @@ module.exports.updateMovie = async (req, res) => {
         if (result.affectedRows > 0) {
             res.status(200).json({
                 code: "MOVIE-UPDATED",
-                message: "Movie updated successfully."
+                message: "All set! The movie has been updated."
             });
         } else {
             res.status(404).json({
                 code: "MOVIE-NOT-FOUND",
-                message: "Movie not found."
+                message: "Oops, no movie found with that ID."
             });
         }
     } catch (error) {
         res.status(500).json({
             code: "SERVER-ERROR",
-            message: "There was an error updating the movie.",
+            message: "Oops! Something went wrong while updating the movie.",
             error: error.message
         });
     }
 };
 
-// Delete Movie
+// Delete a Movie by ID
 module.exports.deleteMovie = async (req, res) => {
     try {
         const result = await Movie.deleteMovie(req.params.id);
         if (result.affectedRows > 0) {
             res.status(200).json({
                 code: "MOVIE-DELETED",
-                message: "Movie deleted successfully."
+                message: "Done! The movie is no longer in the list."
             });
         } else {
             res.status(404).json({
                 code: "MOVIE-NOT-FOUND",
-                message: "Movie not found."
+                message: "Oops, no movie found with that ID."
             });
         }
     } catch (error) {
         res.status(500).json({
             code: "SERVER-ERROR",
-            message: "There was an error deleting the movie.",
+            message: "Oops! Something went wrong while deleting the movie.",
             error: error.message
         });
     }
