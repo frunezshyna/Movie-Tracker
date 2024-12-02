@@ -1,4 +1,4 @@
-const db = require("../config/db.js");  // Corrected path to config/db.js
+const db = require("../config/db.js");
 
 // Create Movie
 module.exports.createMovie = async (movieData) => {
