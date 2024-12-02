@@ -1,21 +1,22 @@
-// backend/routes/movieRoutes.js
 const express = require("express");
-const movieController = require("../controller/Movie-Controllers.js");
-const router = express.Router();
 
-// Create Movie
+//Express routing components
+const router = express.Router();
+const movieController = require("../controller/Movie-Controllers.js");
+
+// Add a New Movie
 router.post("/add", movieController.addMovie);
 
 // Get All Movies
 router.get("/all", movieController.getAllMovies);
 
-// Get Movie by ID
+// Get a Movie by ID
 router.get("/:id", movieController.getMovieById);
 
-// Update Movie
+// Update a Movie by ID
 router.put("/update/:id", movieController.updateMovie);
 
-// Delete Movie
+// Delete a Movie by ID
 router.delete("/delete/:id", movieController.deleteMovie);
 
 module.exports = router;
